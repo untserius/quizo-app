@@ -1,6 +1,7 @@
 package com.serius.quizo.service.impl;
 
 import com.serius.quizo.dto.QuestionDto;
+import com.serius.quizo.dto.UserResponse;
 import com.serius.quizo.entity.Question;
 import com.serius.quizo.entity.Quiz;
 import com.serius.quizo.repository.QuestionRepository;
@@ -43,6 +44,21 @@ public class QuizServiceImpl implements QuizService {
             return questionDtoList;
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public Integer calculateResult(long id, List<UserResponse> userResponses) {
+        Quiz quiz = quizRepository.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int marks = 0;
+        for (int i = 0; i<userResponses.size(); i++){
+            String userAnswer = userResponses.get(i).getResponse();
+            String correctAnswer = questions.get(i).getRightAnswer();
+            if (userAnswer.equals(correctAnswer)) {
+                marks++;
+            }
+        }
+        return marks;
     }
 
     public QuestionDto mapToDto(Question question) {

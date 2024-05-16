@@ -1,6 +1,7 @@
 package com.serius.quizo.controller;
 
 import com.serius.quizo.dto.QuestionDto;
+import com.serius.quizo.dto.UserResponse;
 import com.serius.quizo.entity.Question;
 import com.serius.quizo.service.QuestionService;
 import com.serius.quizo.service.QuizService;
@@ -28,5 +29,11 @@ public class QuizController {
     public ResponseEntity<List<QuestionDto>> getQuizQuestions(@PathVariable long id) {
         List<QuestionDto> quizQuestions = quizService.getQuizQuestions(id);
         return new ResponseEntity<>(quizQuestions, HttpStatus.OK);
+    }
+
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable long id, @RequestBody List<UserResponse> userResponses){
+        Integer result = quizService.calculateResult(id, userResponses);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
